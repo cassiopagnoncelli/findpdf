@@ -14,7 +14,10 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 4.4.0)
+    R (>= 4.4.0),
+    compiler,
+    pso,
+    GenSA
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests: 
