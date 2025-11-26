@@ -7,7 +7,24 @@ pfDB <- data.frame(name = c(), pf = c(), discrete = c(), domain = c(), exotic = 
 
 pfParamsDB <- list()
 
-# Database manipulation.
+#' Insert probability function into database
+#'
+#' Adds a distribution entry to the global pfDB and pfParamsDB structures.
+#'
+#' @param name Character; distribution name (e.g., "normal", "binomial")
+#' @param pf Character; R function name for density/mass (e.g., "dnorm", "dbinom")
+#' @param discrete Logical; TRUE for discrete distributions
+#' @param domain Character; one of "REAL", "NONNEGATIVE", "NONPOSITIVE", "NEGATIVE"
+#' @param params Data frame with columns: name, min, max, discrete, initial
+#' @param exotic Logical; TRUE if distribution is exotic (default: TRUE)
+#' @return NULL (modifies global pfDB and pfParamsDB)
+#' @examples
+#' \dontrun{
+#' insertPF("normal", "dnorm", FALSE, "REAL",
+#'   data.frame(name = c("mean", "sd"), min = c(-Inf, 0),
+#'              max = c(Inf, Inf), discrete = c(FALSE, FALSE),
+#'              initial = c(0, 1)), FALSE)
+#' }
 insertPF <- function(name, pf, discrete, domain, params, exotic = TRUE) {
   row <- data.frame(name = name, pf = pf, discrete = discrete, domain = domain, exotic = exotic)
   assign("pfDB", rbind(pfDB, row), envir = .GlobalEnv)

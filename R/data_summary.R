@@ -1,4 +1,18 @@
-# Summarizes the dataset.
+#' Summarize dataset properties
+#'
+#' Analyzes a numeric vector to determine completeness, discreteness, and domain.
+#'
+#' @param x Numeric vector to summarize
+#' @return List with components:
+#'   \describe{
+#'     \item{is_complete}{Logical; TRUE if no NA/NaN values}
+#'     \item{is_discrete}{Logical; TRUE if all values are integers}
+#'     \item{domain}{Character; one of "NEGATIVE", "NONPOSITIVE", "NONNEGATIVE",
+#'                   "POSITIVE", "REAL", or "NOT_IDENTIFIED"}
+#'   }
+#' @examples
+#' data_summary(c(1, 2, 3))
+#' data_summary(c(-1.5, 0, 2.3))
 data_summary <- function(x) {
   # Completeness
   is_complete <- sum(is.na(x)) == 0 & sum(is.nan(x)) == 0

@@ -1,20 +1,25 @@
-#
-# Find the distribution of a given set.
-#
-# Idea:
-# 1. Extend the dataset with bootstrap if it is too small
-# 2. Classify the data (eg. real or nonnegative or positive, integer or continuous
-# 3. Find the best parameters for each distribution
-# 4. List the distributions with the best fitting ranked by the most likely distributions
-#
-
-# TODO
-# 1. include parameters restrictions in rmse, eg. a < b in runif.
-# 2. solve the warnings().
-#
-# options(error = recover)
-
-# Find the most fit distributions for the given data.
+#' Find best-fitting probability distributions
+#'
+#' Identifies the probability distributions that best fit the given data by
+#' testing candidates and ranking them by fitting error.
+#'
+#' @param x Numeric vector; the dataset to analyze
+#' @param include.exotics Logical; include exotic distributions (default: FALSE)
+#' @param remove.na Logical; remove NA values before fitting (default: TRUE)
+#' @param search.combinations Logical; search parameter combinations (default: TRUE)
+#' @return List with components:
+#'   \describe{
+#'     \item{params}{Named list of optimal parameters for each distribution}
+#'     \item{ranking}{Data frame with columns 'pf' (function name) and 'error' (RMSE),
+#'                    sorted by best fit}
+#'   }
+#' @examples
+#' \dontrun{
+#' result <- findpdf(rnorm(100))
+#' head(result$ranking)  # View top distributions
+#' result$params$dnorm   # Get fitted normal parameters
+#' }
+#' @export
 findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combinations = TRUE) {
   # Key data information.
   ds <- data_summary(x)
