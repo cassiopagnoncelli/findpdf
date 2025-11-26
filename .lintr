@@ -10,5 +10,5 @@ linters:
     object_usage_linter = NULL,
     extraction_operator_linter = NULL
   )
-exclusions: list("renv/", "renv.lock", ".Rproj.user/", "man/", "tmp/")
+exclusions: list(".Rproj.user/", "man/", "tmp/")
 encoding: "UTF-8"
