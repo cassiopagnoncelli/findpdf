@@ -20,10 +20,14 @@ pfParamsDB <- list()
 #' @return NULL (modifies global pfDB and pfParamsDB)
 #' @examples
 #' \dontrun{
-#' insertPF("normal", "dnorm", FALSE, "REAL",
-#'   data.frame(name = c("mean", "sd"), min = c(-Inf, 0),
-#'              max = c(Inf, Inf), discrete = c(FALSE, FALSE),
-#'              initial = c(0, 1)), FALSE)
+#' insertPF(
+#'   "normal", "dnorm", FALSE, "REAL",
+#'   data.frame(
+#'     name = c("mean", "sd"), min = c(-Inf, 0),
+#'     max = c(Inf, Inf), discrete = c(FALSE, FALSE),
+#'     initial = c(0, 1)
+#'   ), FALSE
+#' )
 #' }
 insertPF <- function(name, pf, discrete, domain, params, exotic = TRUE) {
   row <- data.frame(name = name, pf = pf, discrete = discrete, domain = domain, exotic = exotic)

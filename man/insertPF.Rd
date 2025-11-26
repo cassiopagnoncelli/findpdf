@@ -27,9 +27,13 @@ Adds a distribution entry to the global pfDB and pfParamsDB structures.
 }
 \examples{
 \dontrun{
-insertPF("normal", "dnorm", FALSE, "REAL",
-  data.frame(name = c("mean", "sd"), min = c(-Inf, 0),
-             max = c(Inf, Inf), discrete = c(FALSE, FALSE),
-             initial = c(0, 1)), FALSE)
+insertPF(
+  "normal", "dnorm", FALSE, "REAL",
+  data.frame(
+    name = c("mean", "sd"), min = c(-Inf, 0),
+    max = c(Inf, Inf), discrete = c(FALSE, FALSE),
+    initial = c(0, 1)
+  ), FALSE
+)
 }
 }

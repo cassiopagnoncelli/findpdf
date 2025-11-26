@@ -19,12 +19,12 @@
 #'   }
 #' @examples
 #' \dontrun{
-#' result <- findpdf(rnorm(100, mean=5, sd=2))
-#' print(result)            # Pretty-printed output
-#' result$params$dnorm      # Access fitted normal parameters
-#' result$ranking           # View full ranking table
-#' result$pdf(5)            # Evaluate PDF at x=5
-#' result$cdf(5)            # Evaluate CDF at x=5
+#' result <- findpdf(rnorm(100, mean = 5, sd = 2))
+#' print(result) # Pretty-printed output
+#' result$params$dnorm # Access fitted normal parameters
+#' result$ranking # View full ranking table
+#' result$pdf(5) # Evaluate PDF at x=5
+#' result$cdf(5) # Evaluate CDF at x=5
 #' }
 #' @export
 findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combinations = TRUE) {
@@ -104,12 +104,12 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
   # Get best-fit distribution and create pdf/cdf functions
   best_dist <- as.character(ranking$pf[1])
   best_params_vals <- best_params[[best_dist]]
-  
+
   # Create pdf function for best fit
   pdf_func <- function(x) {
     do.call(best_dist, c(list(x), as.list(best_params_vals)))
   }
-  
+
   # Create cdf function for best fit (replace 'd' with 'p')
   cdf_name <- sub("^d", "p", best_dist)
   cdf_func <- function(x) {
@@ -125,7 +125,7 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
     best_fit = best_dist
   )
   class(result) <- "findpdf_result"
-  
+
   result
 }
 
@@ -138,33 +138,33 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
 print.findpdf_result <- function(x, n = 10, ...) {
   cat("\nBest-Fitting Probability Distributions\n")
   cat("=======================================\n\n")
-  
+
   cat("Data Summary:\n")
   cat(sprintf("  Type: %s\n", ifelse(x$data_summary$is_discrete, "Discrete", "Continuous")))
   cat(sprintf("  N: %d\n", x$data_summary$n))
   cat(sprintf("  Range: [%.4f, %.4f]\n", x$data_summary$min, x$data_summary$max))
   cat(sprintf("  Mean: %.4f, SD: %.4f\n\n", x$data_summary$mean, x$data_summary$sd))
-  
+
   cat("Top Distributions (by RMSE):\n")
   n_show <- min(n, nrow(x$ranking))
-  
+
   for (i in 1:n_show) {
     pf_name <- as.character(x$ranking$pf[i])
     error <- x$ranking$error[i]
     params <- x$params[[pf_name]]
-    
+
     cat(sprintf("%2d. %s (RMSE: %.6f)\n", i, pf_name, error))
-    
+
     if (length(params) > 0) {
       param_str <- paste(sprintf("%.4f", params), collapse = ", ")
       cat(sprintf("    Parameters: [%s]\n", param_str))
     }
   }
-  
+
   if (nrow(x$ranking) > n) {
     cat(sprintf("\n... and %d more distributions\n", nrow(x$ranking) - n))
   }
-  
+
   cat("\nBest-fit functions: $pdf(x), $cdf(x)\n")
   cat("Access components: $params, $ranking, $data_summary, $best_fit\n")
   invisible(x)

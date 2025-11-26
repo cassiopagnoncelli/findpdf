@@ -78,7 +78,7 @@ test_that("data_summary handles mixed integer and float values correctly", {
   x <- c(1.0, 2.0, 3.0)
   result <- data_summary(x)
   expect_true(result$is_discrete)
-  
+
   # Mix of integers and floats should be continuous
   x <- c(1.0, 2.5, 3.0)
   result <- data_summary(x)
@@ -109,7 +109,7 @@ test_that("data_summary handles very small positive numbers", {
 test_that("data_summary result has expected structure", {
   x <- c(1, 2, 3)
   result <- data_summary(x)
-  
+
   expect_type(result, "list")
   expect_named(result, c("is_complete", "is_discrete", "domain"))
   expect_type(result$is_complete, "logical")

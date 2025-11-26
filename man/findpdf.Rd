@@ -38,11 +38,11 @@ testing candidates and ranking them by fitting error.
 }
 \examples{
 \dontrun{
-result <- findpdf(rnorm(100, mean=5, sd=2))
-print(result)            # Pretty-printed output
-result$params$dnorm      # Access fitted normal parameters
-result$ranking           # View full ranking table
-result$pdf(5)            # Evaluate PDF at x=5
-result$cdf(5)            # Evaluate CDF at x=5
+result <- findpdf(rnorm(100, mean = 5, sd = 2))
+print(result) # Pretty-printed output
+result$params$dnorm # Access fitted normal parameters
+result$ranking # View full ranking table
+result$pdf(5) # Evaluate PDF at x=5
+result$cdf(5) # Evaluate CDF at x=5
 }
 }
