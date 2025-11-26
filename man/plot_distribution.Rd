@@ -4,14 +4,14 @@
 \alias{plot_distribution}
 \title{Plot distribution with histogram and density overlay}
 \usage{
-plot_distribution(data, bins = NULL, vline = 0, title = "Distribution")
+plot_distribution(data, bins = NULL, groups = NULL, title = "Distribution")
 }
 \arguments{
 \item{data}{Numeric vector or data frame with numeric column}
 
 \item{bins}{Number of histogram bins (default: NULL, no histogram). Use "Sturges" for Sturges' rule or a numeric value.}
 
-\item{vline}{X-coordinate for vertical reference line (default: 0)}
+\item{groups}{Numeric vector of threshold values to split data into groups (default: NULL, no grouping). When provided, splits data at thresholds and plots each group with its own color.}
 
 \item{title}{Plot title (default: "Distribution")}
 }
@@ -23,5 +23,6 @@ Plot distribution with histogram and density overlay
 }
 \examples{
 plot_distribution(rnorm(1000))
-plot_distribution(data.frame(x = rnorm(500)), vline = 1, title = "My Distribution")
+plot_distribution(rnorm(1000), groups = c(0), title = "Split at 0")
+plot_distribution(rnorm(1000), groups = c(-1, 1), title = "Three groups")
 }
