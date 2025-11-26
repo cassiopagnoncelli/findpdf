@@ -14,9 +14,14 @@
 #' data_summary(c(1, 2, 3))
 #' data_summary(c(-1.5, 0, 2.3))
 data_summary <- function(x) {
+  if (length(x) == 0) {
+    stop("Input must be a non-empty numeric vector.")
+  }
+  if (sum(!is.numeric(x)) > 0 || sum(is.infinite(x)) > 0 || sum(is.nan(x)) > 0) {
+    stop("Input must be a numeric vector without infinite values.")
+  }
   # Completeness
-  is_complete <- sum(is.na(x)) == 0 & sum(is.nan(x)) == 0
-  x <- x[!is.na(x) && !is.nan(x)]
+  x <- x[complete.cases(x)]
 
   # Basic summary
   min_x <- min(x)
@@ -41,7 +46,6 @@ data_summary <- function(x) {
 
   # Return
   list(
-    is_complete = is_complete,
     is_discrete = is_discrete,
     domain = domain
   )

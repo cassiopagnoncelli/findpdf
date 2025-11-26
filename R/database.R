@@ -3,9 +3,13 @@
 #
 
 # Pdf and pmf database.
-pfDB <- data.frame(name = c(), pf = c(), discrete = c(), domain = c(), exotic = c())
+assign(
+  "pfDB",
+  data.frame(name = c(), pf = c(), discrete = c(), domain = c(), exotic = c()),
+  envir = .GlobalEnv
+)
 
-pfParamsDB <- list()
+assign("pfParamsDB", list(), envir = .GlobalEnv)
 
 #' Insert probability function into database
 #'
@@ -96,17 +100,17 @@ insertPF(
   FALSE
 )
 
-insertPF(
-  "f", "df", FALSE, "NONNEGATIVE",
-  data.frame(
-    name = c("df1", "df2"),
-    min = c(0, 0),
-    max = c(Inf, Inf),
-    discrete = c(TRUE, TRUE),
-    initial = c(50, 50)
-  ),
-  FALSE
-)
+# insertPF(
+#   "f", "df", FALSE, "NONNEGATIVE",
+#   data.frame(
+#     name = c("df1", "df2"),
+#     min = c(0, 0),
+#     max = c(Inf, Inf),
+#     discrete = c(TRUE, TRUE),
+#     initial = c(50, 50)
+#   ),
+#   FALSE
+# )
 
 ## NEEDS AMENDING a < b.
 # insertPF('uniform', 'dunif', FALSE, 'REAL',

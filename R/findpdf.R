@@ -44,10 +44,8 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
   # Perform optimization across candidates
   ranking <- data.frame(pf = c(), error = c())
   best_params <- list()
-  for (i in 1:nrow(candidates)) {
+  for (i in seq_along(candidates)) {
     candidate <- candidates[i, ]
-
-    cat(paste("Testing", candidate$name, "distribution... "))
 
     params_meta <- get(paste("pfParamsDB$", candidate$pf, sep = ""))
 
@@ -87,8 +85,6 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
     if (o$counts[1] <= 2) {
       print(o)
     }
-
-    cat("OK\n")
   }
 
   ranking <- ranking[order(ranking$error), ]
