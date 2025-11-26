@@ -30,7 +30,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
   }
 
   # Define color palette for groups
-  group_colors <- c("#329f32", "#d62728", "#b8860b", "#1f77b4", "#9467bd", "#8c564b", "#e377c2")
+  group_colors <- c("#329f32", "#f03b3b", "#eaaf17", "#1f77b4", "#9467bd", "#8c564b", "#e377c2")
   
   # If no groups specified, plot as single distribution
   if (is.null(groups)) {
@@ -54,7 +54,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
         ggplot2::aes(y = ggplot2::after_stat(density)),
         fill = group_colors[1],
         alpha = .45,
-        linewidth = .1
+        linewidth = 2
       ) +
       ggplot2::geom_vline(xintercept = mean_val, color = "#000000", linetype = "dashed", linewidth = .8) +
       ggplot2::geom_vline(xintercept = mean_val + sd_val, color = "#4e4e4e", linetype = "dashed", linewidth = .5) +
@@ -76,100 +76,62 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
     return(p)
   }
   
-  # Groups specified - split data and plot by group
+  # Groups specified - single density with colored areas
   groups <- sort(groups)
   n_groups <- length(groups) + 1
-  group_labels <- paste0("g", 1:n_groups)
-  
-  # Assign each value to a group (similar to analyse())
-  data <- data |>
-    dplyr::mutate(
-      group = dplyr::case_when(
-        value < groups[1] ~ group_labels[1],
-        TRUE ~ group_labels[n_groups]
-      )
-    )
-  
-  if (length(groups) > 1) {
-    for (i in 2:length(groups)) {
-      data <- data |>
-        dplyr::mutate(
-          group = dplyr::if_else(
-            value >= groups[i - 1] & value < groups[i],
-            group_labels[i],
-            group
-          )
-        )
-    }
-  }
-  
-  # Create base plot
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = value))
   
   # Reverse colors so rightmost group gets first color (green), leftmost gets last
   reversed_colors <- rev(group_colors[1:n_groups])
   
-  # Add histogram if specified (combined for all groups)
+  # Create base plot
+  p <- ggplot2::ggplot(data, ggplot2::aes(x = value))
+  
+  # Add histogram if specified (for all data)
   if (!is.null(bins)) {
     p <- p +
       ggplot2::geom_histogram(
-        ggplot2::aes(y = ggplot2::after_stat(density), fill = group),
+        ggplot2::aes(y = ggplot2::after_stat(density)),
         bins = bins,
-        alpha = 0.35,
-        position = "identity"
-      ) +
-      ggplot2::scale_fill_manual(values = reversed_colors)
+        fill = "gray",
+        alpha = 0.3
+      )
   }
   
-  # Add density curves and statistics for each group, collect legend data
-  legend_data <- list()
+  # Compute density for all data
+  dens <- density(data$value, n = 512)
+  dens_df <- data.frame(x = dens$x, y = dens$y)
   
+  # Color the area under density curve by group
+  # Create boundaries including -Inf and Inf
+  boundaries <- c(-Inf, groups, Inf)
+  
+  # Plot each colored segment
   for (i in 1:n_groups) {
-    group_data <- data |> dplyr::filter(group == group_labels[i])
-    if (nrow(group_data) > 0) {
-      # Use reversed color: rightmost group (highest i) gets first color
+    segment_df <- dens_df |>
+      dplyr::filter(x >= boundaries[i] & x < boundaries[i + 1])
+    
+    if (nrow(segment_df) > 0) {
       group_color <- reversed_colors[i]
-      mean_val <- mean(group_data$value, na.rm = TRUE)
-      sd_val <- sd(group_data$value, na.rm = TRUE)
       
-      # Store for legend
-      legend_data[[i]] <- list(color = group_color, mean = mean_val, sd = sd_val)
-      
-      # Add density curve for this group
       p <- p +
-        ggplot2::geom_density(
-          data = group_data,
-          ggplot2::aes(y = ggplot2::after_stat(density)),
+        ggplot2::geom_ribbon(
+          data = segment_df,
+          ggplot2::aes(x = x, ymin = 0, ymax = y),
           fill = group_color,
-          alpha = .45,
-          linewidth = .1
+          alpha = 0.6
         )
-      
-      # Add mean and SD lines for this group
-      p <- p +
-        ggplot2::geom_vline(xintercept = mean_val, color = group_color, linetype = "dashed", linewidth = .8, alpha = 0.8) +
-        ggplot2::geom_vline(xintercept = mean_val + sd_val, color = group_color, linetype = "dashed", linewidth = .5, alpha = 0.6) +
-        ggplot2::geom_vline(xintercept = mean_val - sd_val, color = group_color, linetype = "dashed", linewidth = .5, alpha = 0.6) +
-        ggplot2::geom_vline(xintercept = mean_val + 2 * sd_val, color = group_color, linetype = "dashed", linewidth = .35, alpha = 0.4) +
-        ggplot2::geom_vline(xintercept = mean_val - 2 * sd_val, color = group_color, linetype = "dashed", linewidth = .35, alpha = 0.4)
     }
   }
   
-  # Add stacked colored legend boxes  
-  for (i in seq_along(legend_data)) {
-    item <- legend_data[[i]]
-    legend_text <- sprintf("μ=%.2f σ=%.2f", item$mean, item$sd)
-    vjust_offset <- 1.1 + (i - 1) * 2
-    
-    p <- p +
-      ggplot2::annotate("label", x = Inf, y = Inf, label = legend_text,
-                       hjust = 1.05, vjust = vjust_offset, size = 5,
-                       fill = item$color, color = "white", alpha = 0.9,
-                       label.padding = ggplot2::unit(0.3, "lines"),
-                       fontface = "bold")
-  }
+  # Add density line on top (very thin)
+  p <- p +
+    ggplot2::geom_line(
+      data = dens_df,
+      ggplot2::aes(x = x, y = y),
+      linewidth = 0.08
+    )
   
-  # Add vertical lines at group boundaries with the color of the group to the right
+  # Add vertical lines at group boundaries with the color of the group to the right (thinner)
   for (i in 1:length(groups)) {
     # Group i+1 is to the right of boundary i, and uses reversed_colors[i+1]
     boundary_color <- reversed_colors[i + 1]
@@ -178,9 +140,14 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
         xintercept = groups[i],
         color = boundary_color,
         linetype = "solid",
-        linewidth = .6,
-        alpha = .9
-      )
+        linewidth = 0.25,
+        alpha = 0.8
+      ) +
+      ggplot2::annotate("text", x = groups[i], y = Inf,
+                       label = sprintf("%.2f", groups[i]),
+                       hjust = -0.1, vjust = 1.2,
+                       size = 3.5, fontface = "bold",
+                       color = boundary_color)
   }
   
   p <- p +
