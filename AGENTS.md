@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `R/` contains the core functions (`data-summary.R` for dataset metadata, `infer-distribution.R` orchestrating inference, `pf-database.R` defining the distribution catalog, and `findpdf-internal.R` with saved state used by inference).
+- `R/` contains the core functions (`data-summary.R` for dataset metadata, `infer-distribution.R` orchestrating inference, `pf-database.R` defining the distribution catalog, and `dtools-internal.R` with saved state used by inference).
 - `tests/testthat.R` wires the testthat harness (edition 3); add specs under `tests/testthat/test_*.R`.
 - `builds/` holds built tarballs and the local install library (`builds/library`) that `.Rprofile` prepends to `.libPaths()`; `man/` and `NAMESPACE` are generated via roxygen2; `rd/` and `README.md` carry supporting resources.
 - Tooling/config lives in `.lintr`, `.Rbuildignore`, `.Rprofile`, and `.Renviron` (compiler flags).
@@ -19,7 +19,7 @@
 - `make lint` uses the `.lintr` config; `make style` runs `styler::style_dir('.')`; `make clean` removes build artifacts; `make stats` reports LOC and change stats; `make uninstall` removes the installed package.
 
 ## Coding Style & Naming Conventions
-- Use 2-space indents and keep lines within 120 characters (per `.lintr`); follow the existing lowerCamelCase naming (e.g., `dataSummary`, `findpdf`).
+- Use 2-space indents and keep lines within 120 characters (per `.lintr`); follow the existing lowerCamelCase naming (e.g., `dataSummary`, `dtools`).
 - Favor vectorized base-R code; validate inputs early with clear `stop()` messages when adding arguments.
 - When adding exported functions, include roxygen2 blocks so `make docs` regenerates docs/NAMESPACE; keep examples runnable and minimal.
 - Avoid new global assignments unless updating the pf database (which intentionally populates globals).

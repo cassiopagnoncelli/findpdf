@@ -1,4 +1,4 @@
 library(testthat)
-library(findpdf)
+library(dtools)
 
-test_check("findpdf")
+test_check("dtools")

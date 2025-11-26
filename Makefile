@@ -2,7 +2,7 @@
 
 R = /Library/Frameworks/R.framework/Resources/bin/R
 Rscript = /Library/Frameworks/R.framework/Resources/bin/Rscript
-PACKAGE_NAME = findpdf
+PACKAGE_NAME = dtools
 PACKAGE_TARBALL = ${PACKAGE_NAME}_*.tar.gz
 PACKAGE_DIR = builds
 PACKAGE_STAR = ${PACKAGE_DIR}/${PACKAGE_TARBALL}

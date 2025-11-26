@@ -1,7 +1,7 @@
 #' Summarize dataset properties
 #'
 #' Analyzes a numeric vector to determine completeness, discreteness, and domain.
-#' This is an internal function used by findpdf.
+#' This is an internal function used by dtools.
 #'
 #' @param x Numeric vector to summarize
 #' @return List with components:
