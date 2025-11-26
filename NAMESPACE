@@ -3,7 +3,6 @@
 S3method(print,findpdf_result)
 export(findpdf)
 importFrom(compiler,cmpfun)
-importFrom(graphics,hist)
 importFrom(pso,psoptim)
 importFrom(stats,complete.cases)
 importFrom(stats,density)

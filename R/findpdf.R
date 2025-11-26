@@ -18,7 +18,6 @@
 #'     \item{best_fit}{Character; name of best-fitting distribution}
 #'     \item{elapsed_time}{Numeric; total optimization time in seconds}
 #'   }
-#' @importFrom graphics hist
 #' @importFrom stats density
 #' @importFrom compiler cmpfun
 #' @importFrom pso psoptim
@@ -55,10 +54,11 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
   }
 
   # Estimate probability density/mass function.
-  if (ds$is_discrete) { ################ FIXME ##############
-    f <- hist(x, breaks = (min(x) - 0.5):(max(x) + 0.5), plot = F)
-    f.x <- f$mids
-    f.y <- f$density
+  if (ds$is_discrete) {
+    # Use table() for discrete data - faster and handles arbitrary values
+    freq_table <- table(x)
+    f.x <- as.numeric(names(freq_table))
+    f.y <- as.numeric(freq_table) / length(x)  # Probability mass, not density
   } else {
     f <- density(x, from = min(x), to = max(x))
     f.x <- f$x
