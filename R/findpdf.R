@@ -13,13 +13,18 @@
 #'     \item{ranking}{Data frame with columns 'pf' (function name) and 'error' (RMSE),
 #'                    sorted by best fit}
 #'     \item{data_summary}{Summary statistics of the input data}
+#'     \item{pdf}{Function; PDF/PMF of best-fitting distribution}
+#'     \item{cdf}{Function; CDF of best-fitting distribution}
+#'     \item{best_fit}{Character; name of best-fitting distribution}
 #'   }
 #' @examples
 #' \dontrun{
-#' result <- findpdf(rnorm(100))
+#' result <- findpdf(rnorm(100, mean=5, sd=2))
 #' print(result)            # Pretty-printed output
 #' result$params$dnorm      # Access fitted normal parameters
 #' result$ranking           # View full ranking table
+#' result$pdf(5)            # Evaluate PDF at x=5
+#' result$cdf(5)            # Evaluate CDF at x=5
 #' }
 #' @export
 findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combinations = TRUE) {
@@ -96,10 +101,28 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
 
   ranking <- ranking[order(ranking$error), ]
 
+  # Get best-fit distribution and create pdf/cdf functions
+  best_dist <- as.character(ranking$pf[1])
+  best_params_vals <- best_params[[best_dist]]
+  
+  # Create pdf function for best fit
+  pdf_func <- function(x) {
+    do.call(best_dist, c(list(x), as.list(best_params_vals)))
+  }
+  
+  # Create cdf function for best fit (replace 'd' with 'p')
+  cdf_name <- sub("^d", "p", best_dist)
+  cdf_func <- function(x) {
+    do.call(cdf_name, c(list(x), as.list(best_params_vals)))
+  }
+
   result <- list(
     params = best_params,
     ranking = ranking,
-    data_summary = ds
+    data_summary = ds,
+    pdf = pdf_func,
+    cdf = cdf_func,
+    best_fit = best_dist
   )
   class(result) <- "findpdf_result"
   
@@ -142,6 +165,7 @@ print.findpdf_result <- function(x, n = 10, ...) {
     cat(sprintf("\n... and %d more distributions\n", nrow(x$ranking) - n))
   }
   
-  cat("\nAccess components: $params, $ranking, $data_summary\n")
+  cat("\nBest-fit functions: $pdf(x), $cdf(x)\n")
+  cat("Access components: $params, $ranking, $data_summary, $best_fit\n")
   invisible(x)
 }

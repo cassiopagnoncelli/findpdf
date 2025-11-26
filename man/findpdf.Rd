@@ -27,6 +27,9 @@ An S3 object of class 'findpdf_result' with components:
 \item{ranking}{Data frame with columns 'pf' (function name) and 'error' (RMSE),
 sorted by best fit}
 \item{data_summary}{Summary statistics of the input data}
+\item{pdf}{Function; PDF/PMF of best-fitting distribution}
+\item{cdf}{Function; CDF of best-fitting distribution}
+\item{best_fit}{Character; name of best-fitting distribution}
 }
 }
 \description{
@@ -35,9 +38,11 @@ testing candidates and ranking them by fitting error.
 }
 \examples{
 \dontrun{
-result <- findpdf(rnorm(100))
+result <- findpdf(rnorm(100, mean=5, sd=2))
 print(result)            # Pretty-printed output
 result$params$dnorm      # Access fitted normal parameters
 result$ranking           # View full ranking table
+result$pdf(5)            # Evaluate PDF at x=5
+result$cdf(5)            # Evaluate CDF at x=5
 }
 }
