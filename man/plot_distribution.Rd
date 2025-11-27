@@ -9,9 +9,11 @@ plot_distribution(data, bins = NULL, groups = NULL, title = "Distribution")
 \arguments{
 \item{data}{Numeric vector or data frame with numeric column}
 
-\item{bins}{Number of histogram bins (default: NULL, no histogram). Use "Sturges" for Sturges' rule or a numeric value.}
+\item{bins}{Number of histogram bins (default: NULL, no histogram). Use "Sturges" for
+Sturges' rule or a numeric value.}
 
-\item{groups}{Numeric vector of threshold values to split data into groups (default: NULL, no grouping). When provided, splits data at thresholds and plots each group with its own color.}
+\item{groups}{Numeric vector of threshold values to split data into groups (default: NULL,
+no grouping). When provided, splits data at thresholds and plots each group with its own color.}
 
 \item{title}{Plot title (default: "Distribution")}
 }

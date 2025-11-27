@@ -14,7 +14,8 @@ analyse(data, groups = c(0), extreme_threshold = 1e+15)
 \item{extreme_threshold}{Threshold for identifying extreme values (default: 1e15)}
 }
 \value{
-List with overall_results (summary statistics and special value counts) and group_results (statistics per group)
+List with overall_results (summary statistics and special value counts) and
+group_results (statistics per group)
 }
 \description{
 Analyse distribution statistics by groups

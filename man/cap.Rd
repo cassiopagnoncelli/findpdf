@@ -11,10 +11,12 @@ cap(x, quantiles = c(0.001, 0.999), policy = c("replace", "remove"))
 
 \item{quantiles}{Numeric vector of length 2 with lower and upper quantile thresholds (default: c(0.001, 0.999))}
 
-\item{policy}{String specifying the policy for handling outliers: "replace" (default) replaces outliers with quantile bounds, "remove" removes outliers from the dataset}
+\item{policy}{String specifying the policy for handling outliers: "replace" (default) replaces
+outliers with quantile bounds, "remove" removes outliers from the dataset}
 }
 \value{
-Numeric vector with values either capped at or filtered by the specified quantiles, depending on the policy
+Numeric vector with values either capped at or filtered by the specified quantiles,
+depending on the policy
 }
 \description{
 Cap distribution values at specified quantiles
