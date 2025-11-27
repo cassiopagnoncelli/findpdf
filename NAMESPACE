@@ -3,6 +3,7 @@
 S3method(print,findpdf_result)
 export(analyse)
 export(cap)
+export(conform)
 export(findpdf)
 export(plot_distribution)
 importFrom(compiler,cmpfun)

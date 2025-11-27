@@ -1,8 +1,8 @@
 Package: dtools
 Type: Package
 Title: Find PDF
-Version: 1.3.6
-Date: 2025-11-26
+Version: 1.3.7
+Date: 2025-11-27
 Author: Cassio Pagnoncelli <cassiopagnoncelli@gmail.com>
 Maintainer: Cassio Pagnoncelli <cassiopagnoncelli@gmail.com>
 Authors@R:
