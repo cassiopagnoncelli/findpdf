@@ -24,7 +24,9 @@ ggplot2 object showing histogram with density curve and statistical markers
 Plot distribution with histogram and density overlay
 }
 \examples{
+\donttest{
 plot_distribution(rnorm(1000))
 plot_distribution(rnorm(1000), groups = c(0), title = "Split at 0")
 plot_distribution(rnorm(1000), groups = c(-1, 1), title = "Three groups")
+}
 }

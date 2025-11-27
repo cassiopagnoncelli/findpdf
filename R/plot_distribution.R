@@ -10,9 +10,11 @@
 #' @importFrom stats sd
 #' @export
 #' @examples
+#' \donttest{
 #' plot_distribution(rnorm(1000))
 #' plot_distribution(rnorm(1000), groups = c(0), title = "Split at 0")
 #' plot_distribution(rnorm(1000), groups = c(-1, 1), title = "Three groups")
+#' }
 plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distribution") {
   # Handle different input types
   if (is.vector(data) || is.atomic(data)) {
@@ -66,7 +68,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
       ggplot2::geom_vline(xintercept = mean_val - 2 * sd_val, color = "#a3a3a3", linetype = "dashed", linewidth = .35)
 
     # Create legend text
-    legend_text <- sprintf("\u03BC=%.2f  \u03C3=%.2f", mean_val, sd_val)
+    legend_text <- sprintf("mu=%.2f  sigma=%.2f", mean_val, sd_val)
 
     p <- p +
       ggplot2::annotate("label",
@@ -160,7 +162,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
         ) +
         ggplot2::annotate("text",
           x = mean_val, y = Inf,
-          label = sprintf("\u03BC=%.2f", mean_val),
+          label = sprintf("mu=%.2f", mean_val),
           hjust = 0.5, vjust = 1.2,
           size = 3, fontface = "bold",
           color = mean_color
