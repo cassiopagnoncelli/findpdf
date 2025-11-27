@@ -5,6 +5,7 @@
 #' @param groups Numeric vector of threshold values to split data into groups (default: NULL, no grouping). When provided, splits data at thresholds and plots each group with its own color.
 #' @param title Plot title (default: "Distribution")
 #' @return ggplot2 object showing histogram with density curve and statistical markers
+#' @importFrom stats sd
 #' @export
 #' @examples
 #' plot_distribution(rnorm(1000))
@@ -63,7 +64,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
       ggplot2::geom_vline(xintercept = mean_val - 2 * sd_val, color = "#a3a3a3", linetype = "dashed", linewidth = .35)
     
     # Create legend text
-    legend_text <- sprintf("μ=%.2f  σ=%.2f", mean_val, sd_val)
+    legend_text <- sprintf("\u03BC=%.2f  \u03C3=%.2f", mean_val, sd_val)
     
     p <- p +
       ggplot2::annotate("label", x = Inf, y = Inf, label = legend_text, 
@@ -154,7 +155,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
           alpha = 0.8
         ) +
         ggplot2::annotate("text", x = mean_val, y = Inf,
-                         label = sprintf("μ=%.2f", mean_val),
+                         label = sprintf("\u03BC=%.2f", mean_val),
                          hjust = 0.5, vjust = 1.2,
                          size = 3, fontface = "bold",
                          color = mean_color)

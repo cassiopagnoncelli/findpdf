@@ -10,6 +10,8 @@ conform(x, limit = 1e+05, na = NA_real_)
 \item{x}{Numeric vector to conform}
 
 \item{limit}{Absolute value limit (default: 1e15). Large values become NA.}
+
+\item{na}{Value to replace invalid entries with (default: NA_real_)}
 }
 \value{
 Numeric vector with invalid values replaced by NA

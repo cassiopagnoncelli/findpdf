@@ -1,3 +1,6 @@
+# Suppress R CMD check NOTEs for NSE variables used in dplyr and ggplot2
+utils::globalVariables(c("value", "group", "prob", "x", "y"))
+
 #' Package initialization
 #'
 #' @param libname Library name
