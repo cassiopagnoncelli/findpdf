@@ -2,8 +2,10 @@
 #'
 #' @param x Numeric vector to cap
 #' @param quantiles Numeric vector of length 2 with lower and upper quantile thresholds (default: c(0.001, 0.999))
-#' @param policy String specifying the policy for handling outliers: "replace" (default) replaces outliers with quantile bounds, "remove" removes outliers from the dataset
-#' @return Numeric vector with values either capped at or filtered by the specified quantiles, depending on the policy
+#' @param policy String specifying the policy for handling outliers: "replace" (default) replaces
+#'   outliers with quantile bounds, "remove" removes outliers from the dataset
+#' @return Numeric vector with values either capped at or filtered by the specified quantiles,
+#'   depending on the policy
 #' @export
 #' @examples
 #' # Replace outliers with quantile bounds

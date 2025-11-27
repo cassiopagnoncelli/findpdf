@@ -3,7 +3,8 @@
 #' @param data Numeric vector or data frame with numeric column
 #' @param groups Numeric vector of threshold values to split data into groups (default: c(0))
 #' @param extreme_threshold Threshold for identifying extreme values (default: 1e15)
-#' @return List with overall_results (summary statistics and special value counts) and group_results (statistics per group)
+#' @return List with overall_results (summary statistics and special value counts) and
+#'   group_results (statistics per group)
 #' @importFrom stats quantile sd
 #' @export
 #' @examples

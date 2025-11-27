@@ -1,8 +1,10 @@
 #' Plot distribution with histogram and density overlay
 #'
 #' @param data Numeric vector or data frame with numeric column
-#' @param bins Number of histogram bins (default: NULL, no histogram). Use "Sturges" for Sturges' rule or a numeric value.
-#' @param groups Numeric vector of threshold values to split data into groups (default: NULL, no grouping). When provided, splits data at thresholds and plots each group with its own color.
+#' @param bins Number of histogram bins (default: NULL, no histogram). Use "Sturges" for
+#'   Sturges' rule or a numeric value.
+#' @param groups Numeric vector of threshold values to split data into groups (default: NULL,
+#'   no grouping). When provided, splits data at thresholds and plots each group with its own color.
 #' @param title Plot title (default: "Distribution")
 #' @return ggplot2 object showing histogram with density curve and statistical markers
 #' @importFrom stats sd
@@ -167,7 +169,7 @@ plot_distribution <- function(data, bins = NULL, groups = NULL, title = "Distrib
   }
 
   # Add vertical lines at group boundaries with the color of the group to the right (thinner)
-  for (i in 1:length(groups)) {
+  for (i in seq_along(groups)) {
     # Group i+1 is to the right of boundary i, and uses reversed_colors[i+1]
     boundary_color <- reversed_colors[i + 1]
     p <- p +

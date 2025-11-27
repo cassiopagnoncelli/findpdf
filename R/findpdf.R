@@ -75,7 +75,7 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
 
     conv.params <- cmpfun(function(params) {
       b <- as.logical(params_meta$discrete)
-      for (i in 1:length(params)) {
+      for (i in seq_along(params)) {
         if (b[i]) {
           params[i] <- round(params[i])
         }
