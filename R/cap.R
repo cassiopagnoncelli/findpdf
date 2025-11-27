@@ -8,12 +8,12 @@
 #' @examples
 #' # Replace outliers with quantile bounds
 #' cap(c(1:100, 1000), quantiles = c(0.05, 0.95), policy = "replace")
-#' 
+#'
 #' # Remove outliers from the dataset
 #' cap(c(1:100, 1000), quantiles = c(0.05, 0.95), policy = "remove")
 cap <- function(x, quantiles = c(0.001, 0.999), policy = c("replace", "remove")) {
   policy <- match.arg(policy)
-  
+
   if (length(quantiles) != 2) {
     stop("quantiles must be a vector of length 2")
   }
@@ -23,9 +23,9 @@ cap <- function(x, quantiles = c(0.001, 0.999), policy = c("replace", "remove"))
   if (quantiles[1] >= quantiles[2]) {
     stop("the first quantile must be less than the second quantile")
   }
-  
+
   qs <- quantile(x, probs = quantiles, na.rm = TRUE)
-  
+
   if (policy == "replace") {
     x[x < qs[1]] <- qs[1]
     x[x > qs[2]] <- qs[2]

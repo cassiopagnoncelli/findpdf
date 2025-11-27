@@ -31,28 +31,28 @@ test_that("plot_distribution handles single group split", {
   set.seed(42)
   x <- rnorm(100, mean = 0, sd = 1)
   p <- dtools::plot_distribution(x, groups = c(0), title = "Split at 0")
-  
+
   expect_s3_class(p, "ggplot")
   expect_equal(p$labels$title, "Split at 0")
   # Should have colored ribbon areas (one per group) and a density line
   ribbon_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomRibbon")))
-  expect_equal(ribbon_layers, 2)  # Two groups
+  expect_equal(ribbon_layers, 2) # Two groups
   line_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomLine")))
-  expect_equal(line_layers, 1)  # One density line
+  expect_equal(line_layers, 1) # One density line
 })
 
 test_that("plot_distribution handles multiple groups", {
   set.seed(123)
   x <- rnorm(200, mean = 0, sd = 2)
   p <- dtools::plot_distribution(x, groups = c(-1, 1), title = "Three groups")
-  
+
   expect_s3_class(p, "ggplot")
   expect_equal(p$labels$title, "Three groups")
   # Should have three colored ribbon areas and one density line
   ribbon_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomRibbon")))
-  expect_equal(ribbon_layers, 3)  # Three groups
+  expect_equal(ribbon_layers, 3) # Three groups
   line_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomLine")))
-  expect_equal(line_layers, 1)  # One density line
+  expect_equal(line_layers, 1) # One density line
 })
 
 test_that("plot_distribution groups are properly sorted", {
@@ -61,7 +61,7 @@ test_that("plot_distribution groups are properly sorted", {
   # Provide groups in unsorted order - should be sorted internally
   p1 <- dtools::plot_distribution(x, groups = c(1, -1))
   p2 <- dtools::plot_distribution(x, groups = c(-1, 1))
-  
+
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p2, "ggplot")
   # Both should produce valid plots (internal sorting should handle it)
@@ -71,7 +71,7 @@ test_that("plot_distribution without groups uses single color scheme", {
   set.seed(789)
   x <- rnorm(50)
   p <- dtools::plot_distribution(x, title = "No groups")
-  
+
   expect_s3_class(p, "ggplot")
   # Should have exactly one density layer when no groups specified
   density_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomDensity")))
@@ -82,7 +82,7 @@ test_that("plot_distribution groups work with histogram", {
   set.seed(321)
   x <- rnorm(150)
   p <- dtools::plot_distribution(x, bins = 20, groups = c(0), title = "Grouped with histogram")
-  
+
   expect_s3_class(p, "ggplot")
   # Should have histogram, colored ribbons, and density line
   has_histogram <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomBar")))
@@ -98,7 +98,7 @@ test_that("plot_distribution handles edge case with many groups", {
   x <- rnorm(500, sd = 3)
   # Test with 5 groups (uses extended color palette)
   p <- dtools::plot_distribution(x, groups = c(-2, -1, 0, 1, 2), title = "Five groups")
-  
+
   expect_s3_class(p, "ggplot")
   # Should have 6 colored ribbon areas (5 boundaries = 6 groups) and one density line
   ribbon_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomRibbon")))
@@ -111,7 +111,7 @@ test_that("plot_distribution groups work with data frames", {
   set.seed(222)
   df <- data.frame(returns = rnorm(100))
   p <- dtools::plot_distribution(df, groups = c(0), title = "DataFrame with groups")
-  
+
   expect_s3_class(p, "ggplot")
   ribbon_layers <- sum(sapply(p$layers, function(l) inherits(l$geom, "GeomRibbon")))
   expect_equal(ribbon_layers, 2)
@@ -123,7 +123,7 @@ test_that("plot_distribution bins=NULL with groups shows only densities", {
   set.seed(333)
   x <- rnorm(100)
   p <- dtools::plot_distribution(x, bins = NULL, groups = c(0))
-  
+
   expect_s3_class(p, "ggplot")
   # Should have no histogram layers when bins=NULL
   has_histogram <- any(sapply(p$layers, function(l) inherits(l$geom, "GeomBar")))

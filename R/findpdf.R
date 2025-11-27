@@ -34,7 +34,7 @@
 findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combinations = TRUE) {
   # Start timing
   start_time <- Sys.time()
-  
+
   # Handle NA removal
   if (remove.na) {
     x <- x[!is.na(x)]
@@ -43,7 +43,7 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
       stop("'x' contains missing values")
     }
   }
-  
+
   # Key data information.
   ds <- data_summary(x)
 
@@ -58,7 +58,7 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
     # Use table() for discrete data - faster and handles arbitrary values
     freq_table <- table(x)
     f.x <- as.numeric(names(freq_table))
-    f.y <- as.numeric(freq_table) / length(x)  # Probability mass, not density
+    f.y <- as.numeric(freq_table) / length(x) # Probability mass, not density
   } else {
     f <- density(x, from = min(x), to = max(x))
     f.x <- f$x
@@ -85,37 +85,40 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
     })
 
     rmse <- cmpfun(function(params) {
-      tryCatch({
-        result <- suppressWarnings(do.call(
-          as.character(candidate$pf),
-          append(list(f.x), as.list(conv.params(params)))
-        ))
-        # Check for non-finite values
-        if (any(!is.finite(result))) {
+      tryCatch(
+        {
+          result <- suppressWarnings(do.call(
+            as.character(candidate$pf),
+            append(list(f.x), as.list(conv.params(params)))
+          ))
+          # Check for non-finite values
+          if (any(!is.finite(result))) {
+            return(1e10)
+          }
+          error <- sqrt(sum((result - f.y)^2))
+          # Return large penalty if error is not finite
+          if (!is.finite(error)) {
+            return(1e10)
+          }
+          return(error)
+        },
+        error = function(e) {
+          # Return large penalty on any error
           return(1e10)
         }
-        error <- sqrt(sum((result - f.y)^2))
-        # Return large penalty if error is not finite
-        if (!is.finite(error)) {
-          return(1e10)
-        }
-        return(error)
-      }, error = function(e) {
-        # Return large penalty on any error
-        return(1e10)
-      })
+      )
     })
 
     # Use PSO for all optimization cases
     # Convert infinite bounds to large finite values for PSO
     lower_bounds <- params_meta$min
     upper_bounds <- params_meta$max
-    
+
     # Replace -Inf with large negative value
     lower_bounds[is.infinite(lower_bounds) & lower_bounds < 0] <- -1e6
     # Replace +Inf with large positive value
     upper_bounds[is.infinite(upper_bounds) & upper_bounds > 0] <- 1e6
-    
+
     o <- psoptim(params_meta$initial, rmse,
       lower = lower_bounds, upper = upper_bounds,
       control = list(
@@ -152,7 +155,7 @@ findpdf <- function(x, include.exotics = FALSE, remove.na = TRUE, search.combina
   # Calculate elapsed time
   end_time <- Sys.time()
   elapsed_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  
+
   result <- list(
     params = best_params,
     ranking = ranking,
@@ -182,7 +185,7 @@ print.findpdf_result <- function(x, n = 10, ...) {
   cat(sprintf("  N: %d\n", x$data_summary$n))
   cat(sprintf("  Range: [%.4f, %.4f]\n", x$data_summary$min, x$data_summary$max))
   cat(sprintf("  Mean: %.4f, SD: %.4f\n", x$data_summary$mean, x$data_summary$sd))
-  
+
   if (!is.null(x$elapsed_time)) {
     cat(sprintf("  Elapsed Time: %.3f seconds\n", x$elapsed_time))
   }
