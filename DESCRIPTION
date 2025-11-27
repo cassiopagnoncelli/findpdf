@@ -13,7 +13,7 @@ Description: Automatically identifies the best-fitting probability distributions
     ranked results with fitted parameters, PDF/CDF functions, and comprehensive statistical summaries.
     Perfect for statistical analysis, simulation modeling, and understanding your data's underlying
     distribution patterns.
-License: file LICENSE
+License: MIT
 Encoding: UTF-8
 Depends:
     R (>= 4.4.0)
